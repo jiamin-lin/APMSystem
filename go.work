@@ -1,9 +1,9 @@
 go 1.21
 
 use (
-	ordersvc
-	skusvc
-	usersvc
-	dogalarm
-	protos
+skusvc
+ordersvc
+usrsvc
+dogalarm
+dogapm
 )
