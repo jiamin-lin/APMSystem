@@ -1,7 +1,10 @@
 package dogapm
 
 import (
+	"context"
+	"fmt"
 	"net/http"
+	"protoc"
 	"testing"
 	"time"
 )
@@ -18,4 +21,30 @@ func TestNewHttpServer(t *testing.T) {
 	})
 	s.Start()
 	time.Sleep(time.Hour)
+}
+
+// helloSvc hello
+type helloSvc struct {
+	protoc.UnimplementedHelloServiceServer
+}
+
+// Receive 接收消息
+func (h *helloSvc) Receive(ctx context.Context, msg *protoc.HelloMsg) (*protoc.HelloMsg, error) {
+	return msg, nil
+}
+
+// TestGrpc 测试grpc
+func TestGrpc(t *testing.T) {
+	go func() {
+		s := NewGrpcServer(":8080")
+		protoc.RegisterHelloServiceServer(s, &helloSvc{})
+		s.Start()
+	}()
+	client := NewGrpcClient("127.0.0.1:8080")
+	res, err := protoc.NewHelloServiceClient(client).
+		Receive(context.TODO(), &protoc.HelloMsg{Msg: "hello"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(res.Msg)
 }
