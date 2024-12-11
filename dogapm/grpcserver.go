@@ -15,10 +15,18 @@ type GrpcServer struct {
 // NewGrpcServer 创建GrpcServer
 func NewGrpcServer(addr string) *GrpcServer {
 	svc := grpc.NewServer(grpc.UnaryInterceptor(unaryServerInterceptor()))
-	return &GrpcServer{
+	server := &GrpcServer{
 		Server: svc,
 		addr:   addr,
 	}
+	// 服务注册
+	globalClosers = append(globalClosers, server)
+	globalStarters = append(globalStarters, server)
+	return server
+}
+
+func (g *GrpcServer) Close() {
+	g.Server.GracefulStop()
 }
 
 // Start 启动服务

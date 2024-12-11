@@ -15,7 +15,10 @@ type HttpServer struct {
 func NewHttpServer(addr string) *HttpServer {
 	mux := http.NewServeMux()
 	server := &http.Server{Addr: addr, Handler: mux}
-	return &HttpServer{mux: mux, Server: server}
+	s := &HttpServer{mux: mux, Server: server}
+	globalStarters = append(globalStarters, s)
+	globalClosers = append(globalClosers, s)
+	return s
 }
 
 // Handle ListenAndServe 启动服务
@@ -39,6 +42,6 @@ func (h *HttpServer) Start() {
 }
 
 // Close 关闭服务
-func (h *HttpServer) Close() error {
-	return h.Shutdown(context.TODO())
+func (h *HttpServer) Close() {
+	h.Shutdown(context.TODO())
 }
