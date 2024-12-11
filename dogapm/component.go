@@ -23,8 +23,10 @@ type endPoint struct {
 	stop chan int
 }
 
+// EndPoint 入口
 var EndPoint = &endPoint{stop: make(chan int, 1)}
 
+// Register 注册组件
 func (e *endPoint) Start() {
 	for _, com := range globalStarters {
 		com.Start()
