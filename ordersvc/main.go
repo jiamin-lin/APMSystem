@@ -4,6 +4,7 @@ import (
 	"dogapm"
 	"net/http"
 	"ordersvc/api"
+	"ordersvc/grpcclient"
 )
 
 func main() {
@@ -14,6 +15,8 @@ func main() {
 	)
 
 	//Todo: 初始化grpc server
+
+	grpcclient.SkuClient = dogapm.NewSkuServiceClient(dogapm.NewGrpcClient(":8081"))
 
 	httpserver := dogapm.NewHttpServer(":8080")
 	httpserver.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
