@@ -14,11 +14,11 @@ type Status struct {
 type httpStatus struct {
 }
 
-var HttpStatus = &httpStatus{}
-
 const (
 	jsonContentType = "application/json"
 )
+
+var HttpStatus = &httpStatus{}
 
 func (h *httpStatus) Ok(w http.ResponseWriter) {
 	status := &Status{

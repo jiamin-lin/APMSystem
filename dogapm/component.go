@@ -6,7 +6,7 @@ import (
 	"syscall"
 )
 
-type stater interface {
+type starter interface {
 	Start()
 }
 
@@ -15,7 +15,7 @@ type closer interface {
 }
 
 var (
-	globalStarters = make([]stater, 0)
+	globalStarters = make([]starter, 0)
 	globalClosers  = make([]closer, 0)
 )
 
@@ -23,17 +23,15 @@ type endPoint struct {
 	stop chan int
 }
 
-// EndPoint 入口
-var EndPoint = &endPoint{stop: make(chan int, 1)}
+var EndPoint = &endPoint{stop: make(chan int)}
 
-// Register 注册组件
 func (e *endPoint) Start() {
 	for _, com := range globalStarters {
 		com.Start()
 	}
 	go func() {
 		quit := make(chan os.Signal)
-		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGINT)
+		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 		<-quit
 		e.ShutDown()
 	}()

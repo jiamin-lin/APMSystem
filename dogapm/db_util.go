@@ -7,7 +7,6 @@ type dBUtil struct {
 
 var DBUtil = &dBUtil{}
 
-// Query 查询
 func (d *dBUtil) Query(rows *sql.Rows, err interface{}) []map[string]interface{} {
 	if err != nil {
 		return nil
@@ -44,7 +43,6 @@ func (d *dBUtil) Query(rows *sql.Rows, err interface{}) []map[string]interface{}
 	return res
 }
 
-// QueryFirst 查询第一条
 func (d *dBUtil) QueryFirst(rows *sql.Rows, err interface{}) map[string]interface{} {
 	res := d.Query(rows, err)
 	if len(res) > 0 {

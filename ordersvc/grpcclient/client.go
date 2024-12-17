@@ -1,9 +1,8 @@
 package grpcclient
 
-import (
-	"protoc"
-)
+import "protos"
 
 var (
-	SkuClient protoc.HelloServiceClient
+	SkuClient  protos.SkuServiceClient
+	UserClient protos.UserServiceClient
 )
